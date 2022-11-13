@@ -1,21 +1,28 @@
-var GoogleStrategy = require( 'passport-google-oauth2' ).Strategy;
+// const GoogleStrategy = require("passport-google-oauth20").Strategy;
 
-const passport = require("passport");
+// require("dotenv").config();
 
-require("dotenv").config();
+// const passport = require("passport");
+// const { UserModel } = require("../model/user.model");
 
-passport.use(new GoogleStrategy({
-    clientID: process.env.client_id,
-    clientSecret: process.env.client_secret,
-    callbackURL: "http://localhost:8080/auth/google/callback",
-    passReqToCallback   : true,
-    scope:[ 'email', 'profile' ]
-  },
-  function(request, accessToken, refreshToken, profile, done) {
-    User.findOrCreate({ googleId: profile.id }, function (err, user) {
-      return done(err, user);
-    });
-  }
-));
+// passport.use(
+//   new GoogleStrategy(
+//     {
+//       clientID: process.env.GOOGLE_CLIENT_ID,
+//       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+//       callbackURL: "http://localhost:7000/user/auth/google/callback",
+//       scope: ["profile", "email"],
+//     },
+//     function (accessToken, refreshToken, profile, cb) {
+//       const user = new UserModel({
+//         email:profile.email || profile.emails.value,
+//         password:"1234",
+//         user_id:profile.id
+//       });
+//       console.log(profile);
+//       return cb(null, "user");
+//     }
+//   )
+// );
 
-module.exports = passport;
+// module.exports = passport;

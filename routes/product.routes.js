@@ -3,7 +3,9 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
 const cors = require("cors");
-const { authentication } = require("../middlewares/authentication");
+
+const authentication = require("../middlewares/authentication");
+
 const {
   CoatModel,
   JacketModel,
@@ -13,7 +15,7 @@ const {
   CartModel,
 } = require("../model/product.model");
 const productController = Router();
-// productController.use(cors());
+productController.use(cors());
 
 productController.get("/coats", async (req, res) => {
   console.log(req.body.userId);
@@ -38,19 +40,6 @@ productController.get("/dresses", async (req, res) => {
   const dresses = await DressesModel.find();
   console.log(dresses);
   res.send(dresses);
-});
-productController.get("/sortasc/mens", async (req, res) => {
-  console.log(req.body.userId);
-  const mens = await MenModel.find({ $sort: { price: 1 } });
-  console.log(mens);
-  res.send(mens);
-});
-
-productController.get("/sortdesc/mens", async (req, res) => {
-  console.log(req.body.userId);
-  const mens = await MenModel.find({ $sort: { price: -1 } });
-  console.log(mens);
-  res.send(mens);
 });
 
 productController.get("/mens", async (req, res) => {
@@ -78,3 +67,23 @@ productController.post("/addcart", authentication, async (req, res) => {
 module.exports = {
   productController,
 };
+
+productController.get("/cart", authentication, async (req, res) => {
+  const Cartprod = await CartModel.find({ userId: req.body.userId });
+  console.log(Cartprod);
+  res.send(Cartprod);
+});
+productController.post("/addcart", authentication, async (req, res) => {
+  const Cartprod = new CartModel(req.body);
+  console.log(Cartprod);
+  try {
+    await Cartprod.save();
+    res.send("pr");
+  } catch (err) {
+    console.log("something went wrong");
+    res.redirect("/product/cart");
+  }
+});
+
+module.exports = productController;
+
