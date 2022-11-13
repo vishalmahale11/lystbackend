@@ -11,7 +11,7 @@ require("dotenv").config();
 
 app.use(cors());
 app.use(express.json());
-const PORT = 8080;
+const PORT = process.env.PORT || 8080;
 
 // const passport = require("./middlewares/google.Oauth");
 app.use("/product", productController);
@@ -34,11 +34,11 @@ app.get("/", (req, res) => {
 
 app.listen(PORT, async () => {
   try {
-    await connection;
+    await connection();
     console.log("Connected to db");
+    console.log(`http://localhost:${PORT}`);
   } catch (err) {
     console.log("Error connnecting to DB");
     console.log(err);
   }
-  console.log(`listening on PORT ${PORT}`);
 });
